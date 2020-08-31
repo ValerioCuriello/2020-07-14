@@ -36,6 +36,7 @@ public class PremierLeagueDAO {
 		}
 	}
 	
+	// MI TORNA LA LISTA DI VERTICI DEL GRAFO 
 	public List<Team> listAllTeams(){
 		String sql = "SELECT * FROM Teams";
 		List<Team> result = new ArrayList<Team>();
@@ -110,6 +111,26 @@ public class PremierLeagueDAO {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public Integer getRisultato(Match m) {
+		String sql = "SELECT m.ResultOfTeamHome AS result " + 
+				"from matches m " + 
+				"WHERE m.MatchID = ? " ;
+		Integer risultato = 0;
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, m.getMatchID());
+			ResultSet res = st.executeQuery();
+			if(res.next()) {
+				risultato = res.getInt("result");
+			}
+			conn.close();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return risultato;
 	}
 	
 }
